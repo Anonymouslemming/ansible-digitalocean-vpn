@@ -2,22 +2,21 @@
 - hosts: localhost
   gather_facts: false
   vars:
-  - region_id: 5
-  - size_id: 66
-  - image_id: 1505447
+  - region_id: ams2
+  - size_id: 512mb
+  - image_id: ubuntu-14-04-x64
   tasks:
-  - easy_install: name=dopy
+  - include: tasks/install_python_packages.yml
   - digital_ocean: >
       state=present
-      client_id={{ do_client_id }}
-      api_key={{ do_api_key }}
+      api_token={{ do_api_token }}
       command=droplet
       name=vpn
       size_id={{ size_id }}
       region_id={{ region_id }}
       image_id={{ image_id }}
       ssh_key_ids={{ do_ssh_key_id }}
-      wait_timeout=200
+      wait_timeout=500
     register: my_droplet
   - lineinfile: >
       dest=/etc/hosts
@@ -25,6 +24,11 @@
       state=present
       line="{{ my_droplet.droplet.ip_address }} vpn"
     sudo: yes
+  - lineinfile: >
+      dest=/etc/ansible/hosts
+      regexp="^vpn.*root"
+      insertbefore=BOF
+      state=present
+      line="vpn ansible_ssh_user=root"
+    sudo: yes
   - shell: 'ssh-keygen -f "$HOME/.ssh/known_hosts" -R vpn'
-
-

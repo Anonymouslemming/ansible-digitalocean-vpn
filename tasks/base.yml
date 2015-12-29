@@ -15,6 +15,5 @@
   apt: pkg={{ item }} state=latest
   with_items:
   - vim
-  - htop
   - git
   - python-keyczar # required to use accelerated mode

@@ -1,0 +1,8 @@
+#
+# Install necessary python packages on control machine
+# 
+---
+- name: install pip and six
+  pip: name="dopy six"
+  become: true
+  become_user: root

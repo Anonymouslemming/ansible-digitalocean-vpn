@@ -2,7 +2,7 @@
 # It should include only tasks that are required on all servers
 #
 ---
-- hosts: all
+- hosts: vpn
   tasks:
   - include: tasks/base.yml
   - name: dist-upgrade

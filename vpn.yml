@@ -4,6 +4,7 @@
   vars:
     server_addr: 10.8.0.1
     client_addr: 10.8.0.2
+    openvpn_cd: /etc/openvpn
     keyfile: static.key
     keepalive: "10 60"
     compression: true

@@ -18,15 +18,15 @@
   notify:
     - restart openvpn
 
-- name: manage openvpn key
-  copy:
-    src=files/{{ keyfile }}
-    dest=/etc/openvpn/{{ keyfile }}
-    owner=root
-    group=root
-    mode=0600
+- name: generate key
+  command: '/usr/sbin/openvpn --genkey --secret {{ openvpn_cd }}/{{ keyfile }}'
   notify:
     - restart openvpn
+
+- name: extract key
+  command: 'cat {{ openvpn_cd }}/{{ keyfile }}'
+  changed_when: no
+  register: openvpn_server_secret_result
 
 - name: enable ipv4 forwarding
   sysctl: name=net.ipv4.ip_forward value=1
