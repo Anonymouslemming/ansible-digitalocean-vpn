@@ -1,8 +1,18 @@
-## Ansible playbooks
+## Ansible for DigitalOcean VPN
 
 This is a set of scripts and playbooks for setting up an OpenVPN endpoint using DigitalOcean.
 
-All examples below imply that you have setup inventory for you.
+All examples below imply that you have setup inventory.
+
+## Overview
+This is a fork of [https://github.com/timurb/ansible-digitalocean-vpn](https://github.com/timurb/ansible-digitalocean-vpn). Once Ansible 2.0 packages are more common, I'll raise a pull request to merge this.
+
+
+### Changes from https://github.com/timurb/ansible-digitalocean-vpn
+* The teardown functionality from https://github.com/timurb/ansible-digitalocean-vpn is not present in this fork - this will be replaced soon with a solution that does not require ruby or tugboat
+* pip replaces easy_install
+* Static key is generated during the installation
+* Suports Ansible v2 and DigitalOcean v2 API
 
 ## Requirements
 These playbooks use the v2 API from DigitalOcean and this requires that you be using Ansible v2 or later. As of December 2015, this means deploying from source - see http://docs.ansible.com/ansible/intro_installation.html#getting-ansible for instructions.
