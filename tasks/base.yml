@@ -3,8 +3,8 @@
 # It should contain only the fixes required on all servers.
 #
 ---
-- name: update apt cache
-  apt: update_cache=yes cache_valid_time=86400
+- name: update apt packages
+  apt: upgrade=dist update_cache=yes cache_valid_time=3600
 
 - name: remove extra packages
   apt: pkg={{ item }} state=absent
@@ -17,3 +17,4 @@
   - vim
   - git
   - python-keyczar # required to use accelerated mode
+  - iptables-persistent

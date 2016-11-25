@@ -10,13 +10,14 @@
     group=root
     mode=0755
 
-- name: create openvpn config
-  template:
-    src=templates/openvpn.conf.j2
-    dest=/etc/openvpn/openvpn.conf
-    backup=yes
+- name: Copy and populate templates
+  template: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode={{ item.mode }} backup=yes
+  with_items:
+      - { src: 'openvpn.conf.j2', dest: '/etc/openvpn/openvpn.conf', mode: '0640' }
+      - { src: 'etc_iptables_rules.v4.j2', dest: '/etc/iptables/rules.v4', mode: '0640' }
   notify:
     - restart openvpn
+    - reload iptables rules
 
 - name: generate key
   command: '/usr/sbin/openvpn --genkey --secret {{ openvpn_cd }}/{{ keyfile }}'
