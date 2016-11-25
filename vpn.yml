@@ -1,7 +1,17 @@
 ---
 - hosts: vpn
+  gather_facts: false
 
-  vars:
+  pre_tasks:
+   - name: Install Python for ansible
+     raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+     changed_when: False
+   - action: setup
+
+  vars: 
+    target_host_name: vpn
+    vpn_port: 1194
+    vpn_protocol: udp
     server_addr: 10.8.0.1
     client_addr: 10.8.0.2
     openvpn_cd: /etc/openvpn
@@ -10,8 +20,8 @@
     compression: true
 
   tasks:
-  - include: tasks/base.yml
-  - include: tasks/vpn.yml
+    - include: tasks/base.yml
+    - include: tasks/vpn.yml
 
   handlers:
   - include: handlers/vpn.yml
