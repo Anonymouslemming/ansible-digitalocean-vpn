@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+TARGET_HOST=vpn
+
 echo "Script started at $(date)"
 
 if [ "$1" = "--nocreate" ]; then
@@ -9,14 +11,14 @@ else
 fi
 
 echo -n "Waiting for host to start up "
-while ! ping -c 1 -W 5 vpn > /dev/null; do
+while ! ping -c 1 -W 5 ${TARGET_HOST} > /dev/null; do
   echo -n "."
   sleep 1 
 done
 echo
 
 echo -n "Waiting for SSH server on the host to start"
-while ! netcat -z vpn 22; do
+while ! netcat -z ${TARGET_HOST} 22; do
   echo -n "."
   sleep 1 
 done
@@ -24,7 +26,6 @@ sleep 3
 echo
 
 ansible-playbook vpn.yml $@
-#ansible-playbook vpn_teardown.yml $@
 
 which notify-send > /dev/null && notify-send -i call-start 'VPN gateway is online'
 
