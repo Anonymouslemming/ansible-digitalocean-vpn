@@ -4,6 +4,10 @@ This is a set of scripts and playbooks for setting up an OpenVPN endpoint using 
 
 All examples below imply that you have setup inventory.
 
+## Latest changes
+* Updated to Ubuntu 16.04.1 LTS 
+* VPN Target host name can now be changed
+
 ## Overview
 This is a fork of [https://github.com/timurb/ansible-digitalocean-vpn](https://github.com/timurb/ansible-digitalocean-vpn). Once Ansible 2.0 packages are more common, I'll raise a pull request to merge this.
 
@@ -21,6 +25,12 @@ As well as Ansible v2, you will also need to ensure that you have a recent versi
 ```bash
 sudo apt-get install python-setuptools
 ```
+
+## Using a different hostname than vpn
+If you wish to use a hostname other than vpn, you need to change 'vpn' to your desired hostname in the following places:
+* vpn.yml - lines 2 (hosts: vpn) and 12 (target_host_name: vpn)
+* create_vpn.sh - line 3 (TARGET_HOST=vpn)
+* vpn_digital_ocean.yml - line 5 (target_host_name: vpn)
 
 ## Autodeploy of VPN server to [Digital Ocean](http://digitalocean.com/)
 
@@ -66,6 +76,8 @@ ansible-playbook bootstrap.yml
 Sets up the OpenVPN server configured to use with static key.
 
 * Check the list of variables in `vpn.yml` and adjust them to your needs. The main things that you're likely to need to change are 
+    * vpn_port - port to use for VPN
+	* vpn_protocol - protocol (tcp or udp) to use
     * server_addr - tunnel IP on server
 	* client_addr - tunnel IP on client
 	* openvpn_cd - OpenVPN config directory
