@@ -1,3 +1,8 @@
 ---
 - name: restart openvpn
   service: name=openvpn enabled=yes state=restarted
+
+- name: reload iptables rules
+  shell: /sbin/iptables-restore < /etc/iptables/rules.v4
+  args:
+      executable: /bin/bash
