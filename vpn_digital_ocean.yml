@@ -2,16 +2,17 @@
 - hosts: localhost
   gather_facts: false
   vars:
-  - region_id: ams2
-  - size_id: 512mb
-  - image_id: ubuntu-14-04-x64
+    - target_host_name: vpn
+    - region_id: ams2
+    - size_id: 512mb
+    - image_id: ubuntu-16-04-x64
   tasks:
   - include: tasks/install_python_packages.yml
   - digital_ocean: >
       state=present
       api_token={{ do_api_token }}
       command=droplet
-      name=vpn
+      name={{ target_host_name }}
       size_id={{ size_id }}
       region_id={{ region_id }}
       image_id={{ image_id }}
@@ -20,15 +21,15 @@
     register: my_droplet
   - lineinfile: >
       dest=/etc/hosts
-      regexp="vpn$"
+      regexp="{{ target_host_name }}$"
       state=present
-      line="{{ my_droplet.droplet.ip_address }} vpn"
-    sudo: yes
+      line="{{ my_droplet.droplet.ip_address }} {{ target_host_name }}"
+    become: yes
   - lineinfile: >
       dest=/etc/ansible/hosts
       regexp="^vpn.*root"
       insertbefore=BOF
       state=present
-      line="vpn ansible_ssh_user=root"
-    sudo: yes
-  - shell: 'ssh-keygen -f "$HOME/.ssh/known_hosts" -R vpn'
+      line="{{ target_host_name }} ansible_ssh_user=root"
+    become: yes
+  - shell: 'ssh-keygen -f "$HOME/.ssh/known_hosts" -R {{ target_host_name }}'
