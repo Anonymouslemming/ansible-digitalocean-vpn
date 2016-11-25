@@ -1,6 +1,8 @@
 # {{ ansible_managed }}
 
 dev tun
+port {{ vpn_port }}
+proto {{ vpn_protocol }}
 ifconfig {{ server_addr }} {{ client_addr }}
 secret {{ keyfile }}
 
